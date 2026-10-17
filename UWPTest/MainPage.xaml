@@ -8,6 +8,18 @@
             HorizontalAlignment="Center"
             FontSize="24"
             Text="WinUI 3 正在 UWP 容器中运行" />
+        <Border
+            Padding="16"
+            Background="{ThemeResource CardBackgroundFillColorDefaultBrush}"
+            BorderBrush="{ThemeResource CardStrokeColorDefaultBrush}"
+            BorderThickness="1"
+            CornerRadius="8">
+            <TextBlock
+                x:Name="EnvInfo"
+                FontFamily="Consolas"
+                FontSize="13"
+                LineHeight="22" />
+        </Border>
         <Button x:Name="CounterButton" HorizontalAlignment="Center" Content="点击计数: 0" Click="CounterButton_Click" />
     </StackPanel>
 </Page>
