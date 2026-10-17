@@ -10,18 +10,18 @@ public static class Program
 	private const string XamlRegistryKeyPath = @"SOFTWARE\Microsoft\WinUI\Xaml";
 	private const string XamlRegistryValueName = "EnableUWPWindow";
 
-    /// <summary>窗口模型策略原始值：0=None，1=Universal，2=ClassicDesktop，3=ClassicPhone。</summary>
-    public static int WindowingModel { get; } = QueryWindowingModel();
+	/// <summary>窗口模型策略原始值：0=None，1=Universal，2=ClassicDesktop，3=ClassicPhone。</summary>
+	public static int WindowingModel { get; } = QueryWindowingModel();
 
-    /// <summary>生命周期管理策略原始值：0=Unmanaged，1=Managed（受 PLM 托管）。</summary>
-    public static int LifecycleManagement { get; } = QueryLifecycleManagement();
+	/// <summary>生命周期管理策略原始值：0=Unmanaged，1=Managed（受 PLM 托管）。</summary>
+	public static int LifecycleManagement { get; } = QueryLifecycleManagement();
 
-    /// <summary>
-    /// 当前进程是否运行在 UWP（CoreWindow）容器内。
-    /// 通过 appmodel 策略 API 查询窗口模型：Universal = UWP，ClassicDesktop = Win32。
-    /// 注意：必须声明在 WindowingModel 之后，静态初始化按文本顺序执行。
-    /// </summary>
-    public static bool IsCoreWindow { get; } = WindowingModel == AppPolicyWindowingModelUniversal;
+	/// <summary>
+	/// 当前进程是否运行在 UWP（CoreWindow）容器内。
+	/// 通过 appmodel 策略 API 查询窗口模型：Universal = UWP，ClassicDesktop = Win32。
+	/// 注意：必须声明在 WindowingModel 之后，静态初始化按文本顺序执行。
+	/// </summary>
+	public static bool IsCoreWindow { get; } = WindowingModel == AppPolicyWindowingModelUniversal;
 
 	private static bool IsUwpWindowEnabled
 	{
