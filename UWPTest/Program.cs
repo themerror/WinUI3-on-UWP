@@ -10,11 +10,17 @@ public static class Program
 	private const string XamlRegistryKeyPath = @"SOFTWARE\Microsoft\WinUI\Xaml";
 	private const string XamlRegistryValueName = "EnableUWPWindow";
 
-	/// <summary>
-	/// 当前进程是否运行在 UWP（CoreWindow）容器内。
-	/// 通过 appmodel 策略 API 查询窗口模型：Universal = UWP，ClassicDesktop = Win32。
-	/// </summary>
-	public static bool IsCoreWindow { get; } = DetectCoreWindow();
+    /// <summary>
+    /// 当前进程是否运行在 UWP（CoreWindow）容器内。
+    /// 通过 appmodel 策略 API 查询窗口模型：Universal = UWP，ClassicDesktop = Win32。
+    /// </summary>
+    public static bool IsCoreWindow { get; } = WindowingModel == AppPolicyWindowingModelUniversal;
+
+    /// <summary>窗口模型策略原始值：0=None，1=Universal，2=ClassicDesktop，3=ClassicPhone。</summary>
+    public static int WindowingModel { get; } = QueryWindowingModel();
+
+    /// <summary>生命周期管理策略原始值：0=Unmanaged，1=Managed（受 PLM 托管）。</summary>
+    public static int LifecycleManagement { get; } = QueryLifecycleManagement();
 
 	private static bool IsUwpWindowEnabled
 	{
@@ -64,30 +70,53 @@ public static class Program
 
 	private const int TokenQuery = 0x0008;
 
-	private static bool DetectCoreWindow()
-	{
-		IntPtr token = IntPtr.Zero;
-		try
-		{
-			if (!OpenProcessToken(GetCurrentProcess(), TokenQuery, out token))
-			{
-				return false;
-			}
-			return AppPolicyGetWindowingModel(token, out int model) == 0
-				&& model == AppPolicyWindowingModelUniversal;
-		}
-		catch
-		{
-			return false;
-		}
-		finally
-		{
-			if (token != IntPtr.Zero)
-			{
-				CloseHandle(token);
-			}
-		}
-	}
+    private static int QueryWindowingModel()
+    {
+        IntPtr token = IntPtr.Zero;
+        try
+        {
+            if (!OpenProcessToken(GetCurrentProcess(), TokenQuery, out token))
+            {
+                return -1;
+            }
+            return AppPolicyGetWindowingModel(token, out int model) == 0 ? model : -1;
+        }
+        catch
+        {
+            return -1;
+        }
+        finally
+        {
+            if (token != IntPtr.Zero)
+            {
+                CloseHandle(token);
+            }
+        }
+    }
+
+    private static int QueryLifecycleManagement()
+    {
+        IntPtr token = IntPtr.Zero;
+        try
+        {
+            if (!OpenProcessToken(GetCurrentProcess(), TokenQuery, out token))
+            {
+                return -1;
+            }
+            return AppPolicyGetLifecycleManagement(token, out int policy) == 0 ? policy : -1;
+        }
+        catch
+        {
+            return -1;
+        }
+        finally
+        {
+            if (token != IntPtr.Zero)
+            {
+                CloseHandle(token);
+            }
+        }
+    }
 
 	[DllImport("kernel32.dll")]
 	private static extern IntPtr GetCurrentProcess();
@@ -98,6 +127,9 @@ public static class Program
 	[DllImport("kernel32.dll", SetLastError = true)]
 	private static extern bool CloseHandle(IntPtr handle);
 
-	[DllImport("api-ms-win-appmodel-runtime-l1-1-2.dll")]
-	private static extern int AppPolicyGetWindowingModel(IntPtr processToken, out int policy);
+    [DllImport("api-ms-win-appmodel-runtime-l1-1-2.dll")]
+    private static extern int AppPolicyGetWindowingModel(IntPtr processToken, out int policy);
+
+    [DllImport("api-ms-win-appmodel-runtime-l1-1-2.dll")]
+    private static extern int AppPolicyGetLifecycleManagement(IntPtr processToken, out int policy);
 }
