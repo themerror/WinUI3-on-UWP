@@ -1,0 +1,75 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+
+<Package
+  xmlns="http://schemas.microsoft.com/appx/manifest/foundation/windows10"
+  xmlns:mp="http://schemas.microsoft.com/appx/2014/phone/manifest"
+  xmlns:uap="http://schemas.microsoft.com/appx/manifest/uap/windows10"
+  xmlns:uap5="http://schemas.microsoft.com/appx/manifest/uap/windows10/5"
+  xmlns:uap18="http://schemas.microsoft.com/appx/manifest/uap/windows10/18"
+  IgnorableNamespaces="uap uap5 mp uap18">
+
+	<Identity
+	  Name="UWPTest"
+	  Publisher="CN=UWPTestDev"
+	  Version="1.0.0.0" />
+
+	<mp:PhoneIdentity PhoneProductId="3f8e2a91-7c4b-4d5e-9a1f-2b6c8d0e4f57" PhonePublisherId="00000000-0000-0000-0000-000000000000" />
+
+	<Properties>
+		<DisplayName>UWPTest</DisplayName>
+		<PublisherDisplayName>UWPTestDev</PublisherDisplayName>
+		<Logo>Assets\StoreLogo.png</Logo>
+	</Properties>
+
+	<Dependencies>
+		<TargetDeviceFamily Name="Windows.Universal" MinVersion="10.0.17763.0" MaxVersionTested="10.0.26100.0" />
+	</Dependencies>
+
+	<Resources>
+		<Resource Language="x-generate" />
+	</Resources>
+
+	<Applications>
+		<!-- UWP 容器入口：$targetentrypoint$ 由 csproj 的 ApplicationEntryPoint 解析为 UWPTest.App -->
+		<Application Id="App"
+		  Executable="$targetnametoken$.exe"
+		  EntryPoint="$targetentrypoint$" uap18:RuntimeBehavior="windowsApp" uap18:TrustLevel="appContainer">
+			<uap:VisualElements
+			  DisplayName="UWPTest"
+			  Description="WinUI 3 运行于 UWP 容器的示例"
+			  BackgroundColor="transparent"
+			  Square150x150Logo="Assets\Square150x150Logo.png"
+			  Square44x44Logo="Assets\Square44x44Logo.png">
+				<uap:DefaultTile
+				  Wide310x150Logo="Assets\Wide310x150Logo.png"
+				  Square71x71Logo="Assets\SmallTile.png"
+				  Square310x310Logo="Assets\LargeTile.png">
+					<uap:ShowNameOnTiles>
+						<uap:ShowOn Tile="square150x150Logo" />
+						<uap:ShowOn Tile="wide310x150Logo" />
+						<uap:ShowOn Tile="square310x310Logo" />
+					</uap:ShowNameOnTiles>
+				</uap:DefaultTile>
+				<uap:SplashScreen Image="Assets\SplashScreen.png" uap5:Optional="true" />
+			</uap:VisualElements>
+		</Application>
+		<!-- Win32 部分信任入口：同一个 exe 也可以 Win32 方式启动 -->
+		<Application Id="Win32"
+		  Executable="$targetnametoken$.exe"
+		  EntryPoint="windows.fullTrustApplication">
+			<uap:VisualElements
+			  DisplayName="UWPTest (Win32)"
+			  Description="WinUI 3 运行于 UWP 容器的示例（Win32 模式）"
+			  BackgroundColor="transparent"
+			  Square150x150Logo="Assets\Square150x150Logo.png"
+			  Square44x44Logo="Assets\Square44x44Logo.png">
+				<uap:DefaultTile Wide310x150Logo="Assets\Wide310x150Logo.png" />
+				<uap:SplashScreen Image="Assets\SplashScreen.png" uap5:Optional="true" />
+			</uap:VisualElements>
+		</Application>
+	</Applications>
+
+	<Capabilities>
+		<Capability Name="internetClient" />
+	</Capabilities>
+</Package>

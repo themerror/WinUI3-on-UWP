@@ -1,0 +1,10 @@
+{
+  "profiles": {
+    "UWPTest (Package)": {
+      "commandName": "MsixPackage"
+    },
+    "UWPTest (Unpackaged)": {
+      "commandName": "Project"
+    }
+  }
+}

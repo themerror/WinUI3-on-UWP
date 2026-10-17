@@ -1,0 +1,53 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <OutputType>WinExe</OutputType>
+    <TargetFramework>net10.0-windows10.0.22621.0</TargetFramework>
+    <TargetPlatformMinVersion>10.0.17763.0</TargetPlatformMinVersion>
+    <RootNamespace>UWPTest</RootNamespace>
+    <ApplicationManifest>app.manifest</ApplicationManifest>
+    <Platforms>x86;x64;ARM64</Platforms>
+    <RuntimeIdentifiers>win-x86;win-x64;win-arm64</RuntimeIdentifiers>
+    <UseWinUI>true</UseWinUI>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <Nullable>enable</Nullable>
+    <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
+    <WindowsSdkPackageVersion>10.0.26100.84</WindowsSdkPackageVersion>
+
+    <!-- 单项目 MSIX（对齐 wherewhere/CoreAppUWP），不再需要 wapproj -->
+    <EnableMsixTooling>true</EnableMsixTooling>
+
+    <!-- appxmanifest 中 EntryPoint="$targetentrypoint$" 由此属性解析 -->
+    <ApplicationEntryPoint>UWPTest.App</ApplicationEntryPoint>
+    <PublishProfile>win10-$(Platform).pubxml</PublishProfile>
+
+    <!-- 关闭自动 Bootstrap 初始化；UWP 容器下框架包依赖由 MSIX 工具链注入清单 -->
+    <WindowsAppSdkDeploymentManagerInitialize>false</WindowsAppSdkDeploymentManagerInitialize>
+
+    <!-- UWP 容器要求自定义 MTA 入口点，禁用 XAML 自动生成的 Main -->
+    <DefineConstants>$(DefineConstants);DISABLE_XAML_GENERATED_MAIN</DefineConstants>
+
+    <!-- 打包：开发者临时证书自动签名，免手动建证书 -->
+    <AppxPackageDir>AppPackages\</AppxPackageDir>
+    <AppxBundle>Never</AppxBundle>
+    <AppxPackageSigningEnabled>true</AppxPackageSigningEnabled>
+    <AppxPackageSigningTimestampDigestAlgorithm>SHA256</AppxPackageSigningTimestampDigestAlgorithm>
+    <PackageCertificateKeyFile>UWPTest_TemporaryKey.pfx</PackageCertificateKeyFile>
+    <GenerateAppInstallerFile>false</GenerateAppInstallerFile>
+    <GenerateTestArtifacts>true</GenerateTestArtifacts>
+    <HoursBetweenUpdateChecks>0</HoursBetweenUpdateChecks>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Microsoft.WindowsAppSDK" Version="2.5.1" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Manifest Include="$(ApplicationManifest)" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <None Remove="AppPackages\**" />
+  </ItemGroup>
+
+</Project>

@@ -1,0 +1,7 @@
+Windows Registry Editor Version 5.00
+
+; 启用 WinUI 3 在 UWP（CoreWindow）环境中的激活。
+; 需要管理员权限导入。此为未公开、不受支持的开关，请勿用于生产环境。
+
+[HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\WinUI\Xaml]
+"EnableUWPWindow"=dword:00000001
